@@ -18,7 +18,7 @@ const instructionMenuItems : SidebarItemObject[] = [
 const setupMenuItems : SidebarItemObject[] = [
   {
     name: "Create Manual",
-    url: "#",
+    url: "/create",
     icon: ImagePlus
   },
 ];
