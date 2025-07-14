@@ -9,6 +9,7 @@ export default function CreateManualPage(){
   const [images, setImages] = React.useState<File[] | null>(null);
   const [manualName, setManualName] = React.useState<string>("Cafe Manual");
   const [isEditingManual, setIsEditingManual] = React.useState<boolean>(false);
+  const [selectedPage, setSelectedPage] = React.useState<number>(0);
 
   return (
     <div className="w-full h-screen p-4 mt-4 flex flex-col items-start justify-items-start">
@@ -62,7 +63,10 @@ export default function CreateManualPage(){
           </div>
           <hr className="mt-2 mb-2"/>
           <div className="floatmenu-content flex flex-col gap-2">
-            <div className="floatmenu-item flex items-center justify-between p-2 rounded-md bg-neutral-100">
+            <div 
+              className={cn("floatmenu-item flex items-center justify-between p-2 rounded-md", 
+                selectedPage === 0 ? "bg-neutral-100" : "")}
+                onClick={() => setSelectedPage(0)}>
               <div> 
                 <h3 className="text-base"> Manual Front </h3>
                 <h4 className="text-xs font-light text-neutral-700"> cafe-manual-front.jpg </h4>
@@ -72,7 +76,10 @@ export default function CreateManualPage(){
                 <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
               </div>
             </div>
-            <div className="floatmenu-item flex items-center justify-between p-2 rounded-md">
+            <div 
+              className={cn("floatmenu-item flex items-center justify-between p-2 rounded-md", 
+                selectedPage === 1 ? "bg-neutral-100" : "")}
+                onClick={() => setSelectedPage(1)}>
               <div> 
                 <h3 className="text-base"> Manual Back </h3>
                 <h4 className="text-xs font-light text-neutral-700"> cafe-manual-back.jpg </h4>
