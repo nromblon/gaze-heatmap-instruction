@@ -4,6 +4,7 @@ import FloatingMenu from "@/components/floating-menu";
 import { cn } from "@/lib/utils";
 import { Check, Edit, Trash } from "lucide-react";
 import Form from "next/form";
+import Image from "next/image";
 import React from "react";
 export default function CreateManualPage(){
   const [images, setImages] = React.useState<File[] | null>(null);
@@ -13,40 +14,45 @@ export default function CreateManualPage(){
 
   return (
     <div className="w-full h-screen p-4 mt-4 flex flex-col items-start justify-items-start">
-      <h1 className="text-3xl font-medium"> Create Manual </h1>
-      <Form
-        action="/create"
-        className="flex flex-col gap-4 mt-4">
-        <input type="file" 
-          id="imageUp"
-          name="image" 
-          accept="image/*"
-          multiple
-          className="hidden" 
-          onChange={(e) => {
-            const files = e.target.files;
-            setImages(files? Array.from(files) : null);
-          }}
-        />
-        <div>
-          <label htmlFor="imageUp" 
-            className="p-3 border-1 rounded-md text-sm text-neutral-800 hover:bg-neutral-100 cursor-pointer">
-            {images === null || images.length === 0
-              ? "Upload manual images..." :
-              images.length === 1
-                ? `1 image selected`
-                : `${images.length} images selected`
-            }
-          </label>
-          <input 
-            type="button" 
-            value="Upload"
-            disabled={images === null || images.length === 0}
-            className="ml-2 p-2 bg-black text-white rounded-md hover:bg-neutral-900 disabled:bg-neutral-400 disabled:text-neutral-100"/>
+      <div className="flex flex-row justify-between w-full items-end">
+        <div className="flex flex-col items-start">
+          <h1 className="text-3xl font-medium"> Create Manual </h1>
+          <Form
+            action="/create"
+            className="flex flex-col gap-4 mt-4">
+            <input type="file" 
+              id="imageUp"
+              name="image" 
+              accept="image/*"
+              multiple
+              className="hidden" 
+              onChange={(e) => {
+                const files = e.target.files;
+                setImages(files? Array.from(files) : null);
+              }}
+            />
+            <div>
+              <label htmlFor="imageUp" 
+                className="p-3 border-1 rounded-md text-sm text-neutral-800 hover:bg-neutral-100 cursor-pointer">
+                {images === null || images.length === 0
+                  ? "Upload manual images..." :
+                  images.length === 1
+                    ? `1 image selected`
+                    : `${images.length} images selected`
+                }
+              </label>
+              <input 
+                type="button" 
+                value="Upload"
+                disabled={images === null || images.length === 0}
+                className="ml-2 p-2 bg-black text-white rounded-md hover:bg-neutral-900 disabled:bg-neutral-400 disabled:text-neutral-100"/>
+            </div>
+          </Form>
         </div>
-      </Form>
+        <button className="bg-green-700 text-white w-24 h-10 rounded-md hover:bg-green-600 mr-6"> Save </button>
+      </div>
       <div id="manual-adjust-div"
-        className="w-full h-full mt-4 ">
+        className="w-full h-full mt-4 flex flex-row outline-red-300 outline-1">
         <FloatingMenu className="w-72">
           <h2 className="text-xs text-neutral-500"> 2 pages </h2>
           <div className="flex flex-row justify-between">
@@ -100,6 +106,16 @@ export default function CreateManualPage(){
                 min={6}/>
           </div>
         </FloatingMenu>
+        <div className="relative h-full w-full outline-1">
+          <Image
+            className="dark:invert p-6"
+            src="/images/cafe-manual-front.jpg"
+            alt="Gaze Heatmap Logo"
+            layout="fill"
+            objectFit="contain"
+            priority
+          />
+        </div>
       </div>
     </div>
   )
