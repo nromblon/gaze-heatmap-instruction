@@ -21,7 +21,7 @@ const Pagination: React.FC<PaginationProps> = ({ steps, currentStep, onStepChang
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <button className="p-2 border rounded-md bg-black text-white hover:bg-gray-900" onClick={handlePrev} disabled={currentStep === 1}>
+      <button className="p-2 border rounded-md bg-black text-white hover:bg-neutral-900" onClick={handlePrev} disabled={currentStep === 1}>
         Prev
       </button>
       {Array.from({ length: steps }, (_, idx) => {
@@ -43,7 +43,7 @@ const Pagination: React.FC<PaginationProps> = ({ steps, currentStep, onStepChang
           </button>
         );
       })}
-      <button className="p-2 border rounded-md bg-black text-white hover:bg-gray-900" onClick={handleNext} disabled={currentStep === steps}>
+      <button className="p-2 border rounded-md bg-black text-white hover:bg-neutral-900" onClick={handleNext} disabled={currentStep === steps}>
         Next
       </button>
     </div>

@@ -5,7 +5,7 @@ import { FileUp, Home, ImagePlus } from "lucide-react";
 const instructionMenuItems : SidebarItemObject[] = [
   {
     name: "Current Manual",
-    url: "#",
+    url: "/",
     icon: Home
   },
   {
