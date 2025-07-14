@@ -1,11 +1,14 @@
 "use client";
 
 import FloatingMenu from "@/components/floating-menu";
-import { Edit, Trash } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Check, Edit, Trash } from "lucide-react";
 import Form from "next/form";
 import React from "react";
 export default function CreateManualPage(){
   const [images, setImages] = React.useState<File[] | null>(null);
+  const [manualName, setManualName] = React.useState<string>("Cafe Manual");
+  const [isEditingManual, setIsEditingManual] = React.useState<boolean>(false);
 
   return (
     <div className="w-full h-screen p-4 mt-4 flex flex-col items-start justify-items-start">
@@ -46,8 +49,16 @@ export default function CreateManualPage(){
         <FloatingMenu className="w-72">
           <h2 className="text-xs text-neutral-500"> 2 pages </h2>
           <div className="flex flex-row justify-between">
-            <h1 className="text-lg font-bold"> Cafe Manual </h1>
-            <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
+            <h1 className={cn("text-lg font-bold", isEditingManual? 'hidden' : '')}> {manualName} </h1>
+            <input type="text" 
+              className={cn("text-lg font-bold w-40 border-1 border-neutral-300 rounded-md", isEditingManual? '' : 'hidden')}
+              value={manualName}
+              onChange={(e) => setManualName(e.target.value)}/>
+            <button className="p-1 rounded-md hover:text-neutral-600 hover:bg-neutral-200"
+              onClick={() => {setIsEditingManual(!isEditingManual)}}>
+              <Edit className={cn("size-5", isEditingManual? 'hidden' : '')}/>
+              <Check className={cn("size-5 text-green-800", !isEditingManual? 'hidden' : '')}/>
+            </button>
           </div>
           <hr className="mt-2 mb-2"/>
           <div className="floatmenu-content flex flex-col gap-2">
