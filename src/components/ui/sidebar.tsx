@@ -258,7 +258,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
+  const { open, toggleSidebar } = useSidebar()
 
   return (
     <Button
@@ -271,6 +271,7 @@ function SidebarTrigger({
         onClick?.(event)
         toggleSidebar()
       }}
+      style={{"visibility": open && className?.includes("outer") ? "hidden" : "visible"}}
       {...props}
     >
       <PanelLeftIcon />

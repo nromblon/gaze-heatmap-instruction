@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/app-sidebar";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,9 @@ export default function RootLayout({
         >
         <SidebarProvider>
             <AppSidebar />
-            <SidebarTrigger className="justify-end"/>
+            <SidebarTrigger 
+              className="mt-2 justify-end outer"
+            />
             {children}
         </SidebarProvider>
         </body>

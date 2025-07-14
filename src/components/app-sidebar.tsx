@@ -1,4 +1,4 @@
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from "@/components/ui/sidebar";
 import { SidebarItemObject } from "@/types/sidebar-types";
 import { FileUp, Home, ImagePlus } from "lucide-react";
 
@@ -26,9 +26,11 @@ const setupMenuItems : SidebarItemObject[] = [
 export default function AppSidebar() {
   return (
     <Sidebar side="left" variant="sidebar" className="shadow-md">
-        <SidebarHeader className="bg-white">
+        <SidebarHeader className="bg-white flex flex-row justify-between">
           <h1 className="text-xl mt-2"> Gaze Heatmap </h1>
+          <SidebarTrigger className="align-center justify-self-center"/>
         </SidebarHeader>
+        
       <SidebarContent className="bg-white">
         <SidebarGroup>
           <SidebarGroupLabel> Instruction </SidebarGroupLabel>
