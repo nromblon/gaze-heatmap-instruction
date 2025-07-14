@@ -1,5 +1,7 @@
 "use client";
 
+import FloatingMenu from "@/components/floating-menu";
+import { Edit, Trash } from "lucide-react";
 import Form from "next/form";
 import React from "react";
 export default function CreateManualPage(){
@@ -39,6 +41,48 @@ export default function CreateManualPage(){
             className="ml-2 p-2 bg-black text-white rounded-md hover:bg-neutral-900 disabled:bg-neutral-400 disabled:text-neutral-100"/>
         </div>
       </Form>
+      <div id="manual-adjust-div"
+        className="w-full h-full mt-4 ">
+        <FloatingMenu className="w-72">
+          <h2 className="text-xs text-neutral-500"> 2 pages </h2>
+          <div className="flex flex-row justify-between">
+            <h1 className="text-lg font-bold"> Cafe Manual </h1>
+            <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
+          </div>
+          <hr className="mt-2 mb-2"/>
+          <div className="floatmenu-content flex flex-col gap-2">
+            <div className="floatmenu-item flex items-center justify-between p-2 rounded-md bg-neutral-100">
+              <div> 
+                <h3 className="text-base"> Manual Front </h3>
+                <h4 className="text-xs font-light text-neutral-700"> cafe-manual-front.jpg </h4>
+              </div>
+              <div className="flex flex-row gap-1">
+                <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
+                <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
+              </div>
+            </div>
+            <div className="floatmenu-item flex items-center justify-between p-2 rounded-md">
+              <div> 
+                <h3 className="text-base"> Manual Back </h3>
+                <h4 className="text-xs font-light text-neutral-700"> cafe-manual-back.jpg </h4>
+              </div>
+              <div className="flex flex-row gap-1">
+                <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
+                <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
+              </div>
+            </div>
+            <hr className="mt-2 mb-2"/>
+              <label htmlFor="from-step" className="text-sm">From Step</label>
+              <input id="from-step" type="number" 
+                className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32 mb-4"
+                min={1}/>
+              <label htmlFor="from-step" className="text-sm">To Step</label>
+              <input id="from-step" type="number" 
+                className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32"
+                min={6}/>
+          </div>
+        </FloatingMenu>
+      </div>
     </div>
   )
 }
