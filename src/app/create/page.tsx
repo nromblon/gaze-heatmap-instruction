@@ -1,10 +1,10 @@
 "use client";
 
 import FloatingMenu from "@/components/floating-menu";
+import StackedImage from "@/components/stacked-image";
 import { cn } from "@/lib/utils";
 import { Check, Edit, Trash } from "lucide-react";
 import Form from "next/form";
-import Image from "next/image";
 import React from "react";
 export default function CreateManualPage(){
   const [images, setImages] = React.useState<File[] | null>(null);
@@ -107,14 +107,18 @@ export default function CreateManualPage(){
           </div>
         </FloatingMenu>
         <div className="relative h-full w-full outline-1">
-          <Image
+          <StackedImage 
+            images={["/images/cafe-manual-front.jpg", "/images/cafe-manual-back.jpg"]}
+            topIndex={selectedPage}
+          />
+          {/* <Image
             className="dark:invert p-6"
             src="/images/cafe-manual-front.jpg"
             alt="Gaze Heatmap Logo"
             layout="fill"
             objectFit="contain"
             priority
-          />
+          /> */}
         </div>
       </div>
     </div>
