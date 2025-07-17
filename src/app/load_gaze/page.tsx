@@ -4,6 +4,7 @@ import FloatingMenu from '@/components/floating-menu';
 import Pagination from '@/components/pagination';
 import StackedImage from '@/components/stacked-image';
 import { cn } from '@/lib/utils';
+import { CircleCheckBig } from 'lucide-react';
 import Form from 'next/form';
 import React from 'react';
 
@@ -12,6 +13,7 @@ export default function LoadGazePage() {
   const [gazeFiles, setGazeFiles] = React.useState<File[] | null>(null);
   const [selectedPage, setSelectedPage] = React.useState<number>(0);
   const [selectedStep, setSelectedStep] = React.useState<number>(0);
+  const hasPageGenerated = [true, false]; // Example array to track if pages are generated
 
   return (
     <div id='content' className='p-8 w-full h-full'>
@@ -118,21 +120,27 @@ export default function LoadGazePage() {
               <hr className="my-2"/>
               <div className="floatmenu-content flex flex-col gap-2">
                 <div 
-                  className={cn("floatmenu-item flex items-center justify-between p-2 cursor-pointer rounded-md", 
+                  className={cn("floatmenu-item flex flex-row items-center justify-between p-2 cursor-pointer rounded-md", 
                     selectedPage === 0 ? "bg-neutral-100" : "")}
                     onClick={() => setSelectedPage(0)}>
                   <div> 
                     <h3 className="text-base"> Manual Front </h3>
                     <h4 className="text-xs font-light text-neutral-700"> cafe-manual-front.jpg </h4>
                   </div>
+                  <div className={cn("rounded-full p-1", hasPageGenerated[0] ? "" : "hidden")}>
+                    <CircleCheckBig className='text-green-600' />
+                  </div>
                 </div>
                 <div 
-                  className={cn("floatmenu-item flex items-center justify-between p-2 cursor-pointer rounded-md", 
+                  className={cn("floatmenu-item flex flex-row items-center justify-between p-2 cursor-pointer rounded-md", 
                     selectedPage === 1 ? "bg-neutral-100" : "")}
                     onClick={() => setSelectedPage(1)}>
                   <div> 
                     <h3 className="text-base"> Manual Back </h3>
                     <h4 className="text-xs font-light text-neutral-700"> cafe-manual-back.jpg </h4>
+                  </div>
+                  <div className={cn("rounded-full p-1", hasPageGenerated[1] ? "" : "hidden")}>
+                    <CircleCheckBig className='text-green-600' />
                   </div>
                 </div>
               </div>
