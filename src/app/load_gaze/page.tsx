@@ -154,6 +154,7 @@ export default function LoadGazePage() {
           />
           <Pagination
             steps={15}
+            maxVisibleSteps={6}
             currentStep={selectedStep}
             onStepChange={(step) => setSelectedStep(step)}
           />
