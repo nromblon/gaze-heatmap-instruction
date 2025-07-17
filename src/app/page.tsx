@@ -8,7 +8,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = React.useState(1);  
 
   return (
-    <div className="w-full grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="w-full grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-8 sm:p-10 font-[family-name:var(--font-geist-sans)]">
       <header className="row-start-1 flex justify-between w-full">
         <div className="flex-col items-start ">
           <h1 className="text-3xl font-medium"> Construction Block -Cafe- </h1>

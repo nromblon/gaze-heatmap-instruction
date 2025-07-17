@@ -52,8 +52,8 @@ export default function CreateManualPage(){
         <button className="bg-green-700 text-white w-24 h-10 rounded-md hover:bg-green-600 mr-6"> Save </button>
       </div>
       <div id="manual-adjust-div"
-        className="w-full h-full mt-4 flex flex-row">
-        <FloatingMenu className="w-72">
+        className="w-full mt-4 flex flex-row">
+        <FloatingMenu className="w-80 flex flex-col items-stretch self-start">
           <h2 className="text-xs text-neutral-500"> 2 pages </h2>
           <div className="flex flex-row justify-between">
             <h1 className={cn("text-lg font-bold", isEditingManual? 'hidden' : '')}> {manualName} </h1>
@@ -71,39 +71,39 @@ export default function CreateManualPage(){
           <div className="floatmenu-content flex flex-col gap-2">
             <div 
               className={cn("floatmenu-item flex items-center cursor-pointer justify-between p-2 rounded-md", 
-                selectedPage === 0 ? "bg-neutral-100" : "")}
-                onClick={() => setSelectedPage(0)}>
+          selectedPage === 0 ? "bg-neutral-100" : "")}
+          onClick={() => setSelectedPage(0)}>
               <div> 
-                <h3 className="text-base"> Manual Front </h3>
-                <h4 className="text-xs font-light text-neutral-700"> cafe-manual-front.jpg </h4>
+          <h3 className="text-base"> Manual Front </h3>
+          <h4 className="text-xs font-light text-neutral-700"> cafe-manual-front.jpg </h4>
               </div>
               <div className="flex flex-row gap-1">
-                <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
-                <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
+          <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
+          <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
               </div>
             </div>
             <div 
               className={cn("floatmenu-item flex items-center cursor-pointer justify-between p-2 rounded-md", 
-                selectedPage === 1 ? "bg-neutral-100" : "")}
-                onClick={() => setSelectedPage(1)}>
+          selectedPage === 1 ? "bg-neutral-100" : "")}
+          onClick={() => setSelectedPage(1)}>
               <div> 
-                <h3 className="text-base"> Manual Back </h3>
-                <h4 className="text-xs font-light text-neutral-700"> cafe-manual-back.jpg </h4>
+          <h3 className="text-base"> Manual Back </h3>
+          <h4 className="text-xs font-light text-neutral-700"> cafe-manual-back.jpg </h4>
               </div>
               <div className="flex flex-row gap-1">
-                <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
-                <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
+          <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
+          <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
               </div>
             </div>
             <hr className="mt-2 mb-2"/>
               <label htmlFor="from-step" className="text-sm">From Step</label>
               <input id="from-step" type="number" 
-                className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32 mb-4"
-                min={1}/>
+          className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32 mb-4"
+          min={1}/>
               <label htmlFor="from-step" className="text-sm">To Step</label>
               <input id="from-step" type="number" 
-                className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32"
-                min={6}/>
+          className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32"
+          min={6}/>
           </div>
         </FloatingMenu>
         <div className="relative h-full w-full">
