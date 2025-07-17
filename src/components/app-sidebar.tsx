@@ -10,7 +10,7 @@ const instructionMenuItems : SidebarItemObject[] = [
   },
   {
     name: "Load Gaze Data",
-    url: "#",
+    url: "/load_gaze",
     icon: FileUp
   }
 ];

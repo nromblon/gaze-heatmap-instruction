@@ -52,7 +52,7 @@ export default function CreateManualPage(){
         <button className="bg-green-700 text-white w-24 h-10 rounded-md hover:bg-green-600 mr-6"> Save </button>
       </div>
       <div id="manual-adjust-div"
-        className="w-full h-full mt-4 flex flex-row outline-red-300 outline-1">
+        className="w-full h-full mt-4 flex flex-row">
         <FloatingMenu className="w-72">
           <h2 className="text-xs text-neutral-500"> 2 pages </h2>
           <div className="flex flex-row justify-between">
@@ -106,7 +106,7 @@ export default function CreateManualPage(){
                 min={6}/>
           </div>
         </FloatingMenu>
-        <div className="relative h-full w-full outline-1">
+        <div className="relative h-full w-full">
           <StackedImage 
             images={["/images/cafe-manual-front.jpg", "/images/cafe-manual-back.jpg"]}
             topIndex={selectedPage}
