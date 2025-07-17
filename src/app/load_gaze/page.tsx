@@ -1,6 +1,8 @@
 "use client";
 
 import FloatingMenu from '@/components/floating-menu';
+import Pagination from '@/components/pagination';
+import StackedImage from '@/components/stacked-image';
 import { cn } from '@/lib/utils';
 import Form from 'next/form';
 import React from 'react';
@@ -9,6 +11,7 @@ export default function LoadGazePage() {
   const [eventsFiles, setEventsFiles] = React.useState<File[] | null>(null);
   const [gazeFiles, setGazeFiles] = React.useState<File[] | null>(null);
   const [selectedPage, setSelectedPage] = React.useState<number>(0);
+  const [selectedStep, setSelectedStep] = React.useState<number>(0);
 
   return (
     <div id='content' className='p-8 w-full h-full'>
@@ -142,6 +145,18 @@ export default function LoadGazePage() {
               </button>
             </div>
           </div>
+        </div>
+        <div id="manual-thumbnail" className="p-4 m-4 flex-1 flex flex-col items-center justify-center gap-3">
+          <StackedImage
+            images={["/images/cafe-manual-front.jpg", "/images/cafe-manual-back.jpg"]}
+            imageWidth={600}
+            topIndex={selectedPage}
+          />
+          <Pagination
+            steps={15}
+            currentStep={selectedStep}
+            onStepChange={(step) => setSelectedStep(step)}
+          />
         </div>
       </div>
     </div>
