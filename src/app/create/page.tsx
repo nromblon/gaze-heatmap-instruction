@@ -70,7 +70,7 @@ export default function CreateManualPage(){
           <hr className="mt-2 mb-2"/>
           <div className="floatmenu-content flex flex-col gap-2">
             <div 
-              className={cn("floatmenu-item flex items-center justify-between p-2 rounded-md", 
+              className={cn("floatmenu-item flex items-center cursor-pointer justify-between p-2 rounded-md", 
                 selectedPage === 0 ? "bg-neutral-100" : "")}
                 onClick={() => setSelectedPage(0)}>
               <div> 
@@ -83,7 +83,7 @@ export default function CreateManualPage(){
               </div>
             </div>
             <div 
-              className={cn("floatmenu-item flex items-center justify-between p-2 rounded-md", 
+              className={cn("floatmenu-item flex items-center cursor-pointer justify-between p-2 rounded-md", 
                 selectedPage === 1 ? "bg-neutral-100" : "")}
                 onClick={() => setSelectedPage(1)}>
               <div> 
