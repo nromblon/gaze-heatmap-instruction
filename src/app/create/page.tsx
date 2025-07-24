@@ -13,6 +13,8 @@ export default function CreateManualPage(){
   const [isEditingManual, setIsEditingManual] = React.useState<boolean>(false);
   const [selectedPage, setSelectedPage] = React.useState<number>(0);
   const [hasPressedSelect, setPressedSelect] = React.useState<boolean>(false);
+  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     if (hasPressedSelect && selectImages !== null) {
@@ -20,6 +22,60 @@ export default function CreateManualPage(){
     }
     setPressedSelect(false);
   }, [hasPressedSelect, selectImages]);
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    
+    if (draggedIndex === null || !images || draggedIndex === dropIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const newImages = [...images];
+    const draggedItem = newImages[draggedIndex];
+    
+    // Remove dragged item
+    newImages.splice(draggedIndex, 1);
+    
+    // Insert at new position
+    const insertIndex = draggedIndex < dropIndex ? dropIndex - 1 : dropIndex;
+    newImages.splice(insertIndex, 0, draggedItem);
+    
+    setImages(newImages);
+    
+    // Update selected page if necessary
+    if (selectedPage === draggedIndex) {
+      setSelectedPage(insertIndex);
+    } else if (selectedPage > draggedIndex && selectedPage <= dropIndex) {
+      setSelectedPage(selectedPage - 1);
+    } else if (selectedPage < draggedIndex && selectedPage >= dropIndex) {
+      setSelectedPage(selectedPage + 1);
+    }
+    
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
 
   return (
     <div className="w-full h-screen p-4 mt-4 flex flex-col items-start justify-items-start">
@@ -94,8 +150,18 @@ export default function CreateManualPage(){
               return (
                 <div 
                   key={idx}
-                  className={cn("floatmenu-item flex items-center cursor-pointer justify-between p-2 rounded-md", 
-                    selectedPage === idx ? "bg-neutral-100" : "")}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, idx)}
+                  onDragEnd={handleDragEnd}
+                  className={cn(
+                    "floatmenu-item flex items-center cursor-pointer justify-between p-2 rounded-md transition-all", 
+                    selectedPage === idx ? "bg-neutral-100" : "",
+                    draggedIndex === idx ? "opacity-50" : "",
+                    dragOverIndex === idx ? "border-2 border-blue-400 border-dashed" : ""
+                  )}
                   onClick={() => setSelectedPage(idx)}>
                   <div> 
                     <h3 className="text-base"> {`Page ${idx + 1}`} </h3>
