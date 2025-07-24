@@ -4,7 +4,7 @@ import manualSlice from './features/manual/manualSlice'
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      manual: manualSlice
+      manuals: manualSlice
     }
   })
 }

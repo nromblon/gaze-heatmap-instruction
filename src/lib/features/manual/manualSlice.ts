@@ -1,36 +1,45 @@
-import { Page } from "@/types/manual-types";
+import { Manual } from "@/types/manual-types";
 import { createSlice } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 interface ManualState {
-  name: string;
-  pages: Page[];
+  currentManual: Manual | null;
+  manuals: Manual[];
 }
 
 const initialState: ManualState = {
-  name: "",
-  pages: [],
+  currentManual: null,
+  manuals: [],
 };
 
 const manualSlice = createSlice({
-  name: "manual",
+  name: "manuals",
   initialState,
   reducers: {
-    setManualName: (state, action: PayloadAction<string>) => {
-      state.name = action.payload;
+    setCurrentManual: (state, action: PayloadAction<Manual | null>) => {
+      state.currentManual = action.payload;
     },
-    addPage: (state, action: PayloadAction<Page>) => {
-      state.pages.push(action.payload);
+    addManual: (state, action: PayloadAction<Manual>) => {
+      state.manuals.push(action.payload);
     },
-    removePage: (state, action: PayloadAction<number>) => {
-      state.pages.splice(action.payload, 1);
+    updateManual: (state, action: PayloadAction<Manual>) => {
+      const index = state.manuals.findIndex(
+        (manual) => manual.name === action.payload.name
+      );
+      if (index !== -1) {
+        state.manuals[index] = action.payload;
+      }
     },
-    updatePage: (state, action: PayloadAction<{ index: number; page: Page }>) => {
-      const { index, page } = action.payload;
-      state.pages[index] = page;
+    deleteManual: (state, action: PayloadAction<string>) => {
+      state.manuals = state.manuals.filter(
+        (manual) => manual.name !== action.payload
+      );
+    },
+    clearManuals: (state) => {
+      state.manuals = [];
     },
   },
 });
 
-export const { setManualName, addPage, removePage, updatePage } = manualSlice.actions;
+export const { setCurrentManual, addManual, updateManual, deleteManual, clearManuals } = manualSlice.actions;
 export default manualSlice.reducer;

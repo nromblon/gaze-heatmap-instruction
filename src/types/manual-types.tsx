@@ -5,3 +5,8 @@ export type Page = {
   stepFrom: number;
   stepTo: number;
 };
+
+export type Manual = {
+  name: string;
+  pages: Page[];
+};
