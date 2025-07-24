@@ -15,6 +15,7 @@ export default function CreateManualPage(){
   const [hasPressedSelect, setPressedSelect] = React.useState<boolean>(false);
   const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
+  const [dragOverBottom, setDragOverBottom] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (hasPressedSelect && selectImages !== null) {
@@ -44,6 +45,7 @@ export default function CreateManualPage(){
     if (draggedIndex === null || !images || draggedIndex === dropIndex) {
       setDraggedIndex(null);
       setDragOverIndex(null);
+      setDragOverBottom(false);
       return;
     }
 
@@ -70,11 +72,45 @@ export default function CreateManualPage(){
     
     setDraggedIndex(null);
     setDragOverIndex(null);
+    setDragOverBottom(false);
+  };
+
+  const handleDropAtBottom = (e: React.DragEvent) => {
+    e.preventDefault();
+    
+    if (draggedIndex === null || !images) {
+      setDraggedIndex(null);
+      setDragOverBottom(false);
+      return;
+    }
+
+    const newImages = [...images];
+    const draggedItem = newImages[draggedIndex];
+    
+    // Remove dragged item
+    newImages.splice(draggedIndex, 1);
+    
+    // Add to end
+    newImages.push(draggedItem);
+    
+    setImages(newImages);
+    
+    // Update selected page if necessary
+    const newIndex = newImages.length - 1;
+    if (selectedPage === draggedIndex) {
+      setSelectedPage(newIndex);
+    } else if (selectedPage > draggedIndex) {
+      setSelectedPage(selectedPage - 1);
+    }
+    
+    setDraggedIndex(null);
+    setDragOverBottom(false);
   };
 
   const handleDragEnd = () => {
     setDraggedIndex(null);
     setDragOverIndex(null);
+    setDragOverBottom(false);
   };
 
   return (
@@ -174,6 +210,20 @@ export default function CreateManualPage(){
                 </div>
               )
             })}
+            {/* Bottom Drop Zone */}
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                setDragOverBottom(true);
+              }}
+              onDragLeave={() => setDragOverBottom(false)}
+              onDrop={handleDropAtBottom}
+              className={cn(
+                "h-4 rounded-md transition-all",
+                dragOverBottom ? "border-2 border-blue-400 border-dashed bg-blue-50" : ""
+              )}
+            />
             {/* Footer */}
             <hr className="mt-2 mb-2"/>
               <label htmlFor="from-step" className="text-sm">From Step</label>
