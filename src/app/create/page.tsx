@@ -9,7 +9,7 @@ import Form from "next/form";
 import React from "react";
 export default function CreateManualPage(){
   // States for manual creation
-  const [selectImages, setSelectImages] = React.useState<File[] | null>(null);
+  const [loadImages, setLoadImages] = React.useState<File[] | null>(null);
   const [selectedPage, setSelectedPage] = React.useState<number>(0);
 
   // States for Manual Object creation
@@ -18,7 +18,7 @@ export default function CreateManualPage(){
 
   // States for manual editing
   const [isEditingManual, setIsEditingManual] = React.useState<boolean>(false);
-  const [hasPressedSelect, setPressedSelect] = React.useState<boolean>(false);
+  const [hasPressedLoad, setPressedLoad] = React.useState<boolean>(false);
 
   // Drag and drop states
   const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
@@ -27,9 +27,9 @@ export default function CreateManualPage(){
 
 
   React.useEffect(() => {
-    if (hasPressedSelect && selectImages !== null) {
+    if (hasPressedLoad && loadImages !== null) {
       // Create initial pages info based on selected images
-      const initialPages: Page[] = selectImages.map((file, index) => ({
+      const initialPages: Page[] = loadImages.map((file, index) => ({
         name: `Page ${index + 1}`,
         imgURL: file, // Assuming imgURL is a File object
         filename: file.name,
@@ -38,8 +38,8 @@ export default function CreateManualPage(){
       }));
       setPagesInfo(initialPages);
     }
-    setPressedSelect(false);
-  }, [hasPressedSelect, selectImages]);
+    setPressedLoad(false);
+  }, [hasPressedLoad, loadImages]);
 
 
   // Drag and drop handlers
@@ -148,24 +148,24 @@ export default function CreateManualPage(){
               className="hidden" 
               onChange={(e) => {
                 const files = e.target.files;
-                setSelectImages(files? Array.from(files) : null);
+                setLoadImages(files? Array.from(files) : null);
               }}
             />
             <div>
               <label htmlFor="imageUp" 
                 className="p-3 border-1 rounded-md text-sm text-neutral-800 hover:bg-neutral-100 cursor-pointer">
-                {selectImages === null || selectImages.length === 0
+                {loadImages === null || loadImages.length === 0
                   ? "Upload manual images..." :
-                  selectImages.length === 1
+                  loadImages.length === 1
                     ? `1 image selected`
-                    : `${selectImages.length} images selected`
+                    : `${loadImages.length} images selected`
                 }
               </label>
               <input 
                 type="button" 
                 value="Load"
-                onClick={() => setPressedSelect(true)}
-                disabled={selectImages === null || selectImages.length === 0}
+                onClick={() => setPressedLoad(true)}
+                disabled={loadImages === null || loadImages.length === 0}
                 className="ml-2 p-2 bg-black text-white rounded-md hover:bg-neutral-900 disabled:bg-neutral-400 disabled:text-neutral-100"/>
             </div>
           </Form>
