@@ -4,6 +4,7 @@ import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/app-sidebar";
 import React from "react";
+import StoreProvider from "./StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,13 +31,15 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        <SidebarProvider>
-            <AppSidebar />
-            <SidebarTrigger 
-              className="mt-2 justify-end outer"
-            />
-            {children}
-        </SidebarProvider>
+        <StoreProvider>
+          <SidebarProvider>
+              <AppSidebar />
+              <SidebarTrigger 
+                className="mt-2 justify-end outer"
+              />
+              {children}
+          </SidebarProvider>
+        </StoreProvider>
         </body>
     </html>
   );
