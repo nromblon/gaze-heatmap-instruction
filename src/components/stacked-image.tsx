@@ -42,6 +42,7 @@ const StackedImage: React.FC<StackedImageProps> = ({
         {reorderedImages.map((img, i) => (
           <Image
             key={i}
+            
             src={img}
             alt={`stacked-img-${i}`}
             width={imageWidth} // Default width, can be adjusted
