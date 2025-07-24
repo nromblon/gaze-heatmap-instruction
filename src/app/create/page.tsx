@@ -3,27 +3,46 @@
 import FloatingMenu from "@/components/floating-menu";
 import StackedImage from "@/components/stacked-image";
 import { cn } from "@/lib/utils";
+import { Page } from "@/types/manual-types";
 import { Check, Edit, Trash } from "lucide-react";
 import Form from "next/form";
 import React from "react";
 export default function CreateManualPage(){
+  // States for manual creation
   const [selectImages, setSelectImages] = React.useState<File[] | null>(null);
-  const [images, setImages] = React.useState<File[] | null>(null);
-  const [manualName, setManualName] = React.useState<string>("Unnamed Manual");
-  const [isEditingManual, setIsEditingManual] = React.useState<boolean>(false);
   const [selectedPage, setSelectedPage] = React.useState<number>(0);
+
+  // States for Manual Object creation
+  const [manualName, setManualName] = React.useState<string>("Unnamed Manual");
+  const [pagesInfo, setPagesInfo] = React.useState<Page[]>([]);
+
+  // States for manual editing
+  const [isEditingManual, setIsEditingManual] = React.useState<boolean>(false);
   const [hasPressedSelect, setPressedSelect] = React.useState<boolean>(false);
+
+  // Drag and drop states
   const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
   const [dragOverBottom, setDragOverBottom] = React.useState<boolean>(false);
 
+
   React.useEffect(() => {
     if (hasPressedSelect && selectImages !== null) {
-      setImages(selectImages);
+      // Create initial pages info based on selected images
+      const initialPages: Page[] = selectImages.map((file, index) => ({
+        name: `Page ${index + 1}`,
+        imgURL: file, // Assuming imgURL is a File object
+        filename: file.name,
+        stepFrom: -1, 
+        stepTo: -1,
+      }));
+      setPagesInfo(initialPages);
     }
     setPressedSelect(false);
   }, [hasPressedSelect, selectImages]);
 
+
+  // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = 'move';
@@ -41,25 +60,25 @@ export default function CreateManualPage(){
 
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
-    
-    if (draggedIndex === null || !images || draggedIndex === dropIndex) {
+
+    if (draggedIndex === null || !pagesInfo || draggedIndex === dropIndex) {
       setDraggedIndex(null);
       setDragOverIndex(null);
       setDragOverBottom(false);
       return;
     }
 
-    const newImages = [...images];
-    const draggedItem = newImages[draggedIndex];
+    const newPages = [...pagesInfo];
+    const draggedItem = newPages[draggedIndex];
     
     // Remove dragged item
-    newImages.splice(draggedIndex, 1);
+    newPages.splice(draggedIndex, 1);
     
     // Insert at new position
     const insertIndex = draggedIndex < dropIndex ? dropIndex - 1 : dropIndex;
-    newImages.splice(insertIndex, 0, draggedItem);
+    newPages.splice(insertIndex, 0, draggedItem);
     
-    setImages(newImages);
+    setPagesInfo(newPages);
     
     // Update selected page if necessary
     if (selectedPage === draggedIndex) {
@@ -78,25 +97,25 @@ export default function CreateManualPage(){
   const handleDropAtBottom = (e: React.DragEvent) => {
     e.preventDefault();
     
-    if (draggedIndex === null || !images) {
+    if (draggedIndex === null || !pagesInfo) {
       setDraggedIndex(null);
       setDragOverBottom(false);
       return;
     }
 
-    const newImages = [...images];
-    const draggedItem = newImages[draggedIndex];
+    const newPages = [...pagesInfo];
+    const draggedItem = newPages[draggedIndex];
     
     // Remove dragged item
-    newImages.splice(draggedIndex, 1);
+    newPages.splice(draggedIndex, 1);
     
     // Add to end
-    newImages.push(draggedItem);
+    newPages.push(draggedItem);
     
-    setImages(newImages);
+    setPagesInfo(newPages);
     
     // Update selected page if necessary
-    const newIndex = newImages.length - 1;
+    const newIndex = newPages.length - 1;
     if (selectedPage === draggedIndex) {
       setSelectedPage(newIndex);
     } else if (selectedPage > draggedIndex) {
@@ -154,7 +173,7 @@ export default function CreateManualPage(){
         <button className="bg-green-700 text-white w-24 h-10 rounded-md hover:bg-green-600 mr-6"> Save </button>
       </div>
       {/* Displays "No Images Loaded" when no images has been loaded yet */}
-      { images === null ?
+      { pagesInfo === null || pagesInfo.length === 0 ?
         <div className="w-full h-full flex items-center justify-center">
           <h2 className="text-neutral-500"> No images loaded </h2>
         </div>
@@ -162,7 +181,7 @@ export default function CreateManualPage(){
         <></>
       }
       <div id="manual-adjust-div"
-        className={cn("w-full mt-4 flex flex-row", images === null ? "hidden" : "")}
+        className={cn("w-full mt-4 flex flex-row", pagesInfo === null || pagesInfo.length === 0 ? "hidden" : "")}
         >
         <FloatingMenu className="w-80 flex flex-col items-stretch self-start">
           {/* Header */}
@@ -182,7 +201,7 @@ export default function CreateManualPage(){
           <hr className="mt-2 mb-2"/>
           <div className="floatmenu-content flex flex-col gap-2">
             {/* Page Item */}
-            { images?.map((image, idx) => {
+            { pagesInfo?.map((page, idx) => {
               return (
                 <div 
                   key={idx}
@@ -200,8 +219,8 @@ export default function CreateManualPage(){
                   )}
                   onClick={() => setSelectedPage(idx)}>
                   <div> 
-                    <h3 className="text-base"> {`Page ${idx + 1}`} </h3>
-                    <h4 className="text-xs font-light text-neutral-700"> {image.name} </h4>
+                    <h3 className="text-base"> {page.name} </h3>
+                    <h4 className="text-xs font-light text-neutral-700"> {page.filename} </h4>
                   </div>
                   <div className="flex flex-row gap-1">
                     <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
@@ -237,9 +256,9 @@ export default function CreateManualPage(){
           </div>
         </FloatingMenu>
         <div className="relative h-full w-full">
-          {images === null ? <></> : 
+          {pagesInfo === null ? <></> : 
             <StackedImage 
-              images={images.map((image) => URL.createObjectURL(image))}
+              images={pagesInfo.map((pages) => URL.createObjectURL(pages.imgURL))}
               topIndex={selectedPage}
             />
           }
