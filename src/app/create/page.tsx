@@ -41,6 +41,19 @@ export default function CreateManualPage(){
     setPressedLoad(false);
   }, [hasPressedLoad, loadImages]);
 
+  const handleStepChange = (index: number, stepFrom?: number , stepTo?: number) => {
+    if (pagesInfo && index >= 0 && index < pagesInfo.length) {
+      const updatedPages = [...pagesInfo];
+      if (stepFrom !== undefined) {
+        pagesInfo[index].stepFrom = stepFrom;
+      }
+      if (stepTo !== undefined) {
+        pagesInfo[index].stepTo = stepTo;
+      }
+      setPagesInfo(updatedPages);
+    }
+  }
+
 
   // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -248,11 +261,15 @@ export default function CreateManualPage(){
               <label htmlFor="from-step" className="text-sm">From Step</label>
               <input id="from-step" type="number" 
           className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32 mb-4"
-          min={1}/>
+          min={pagesInfo[selectedPage-1] === undefined ? 0 : pagesInfo[selectedPage-1]?.stepTo + 1}
+          value={pagesInfo[selectedPage]?.stepFrom}
+          onChange={(e) => handleStepChange(selectedPage, Number(e.target.value), undefined)}/>
               <label htmlFor="from-step" className="text-sm">To Step</label>
               <input id="from-step" type="number" 
           className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32"
-          min={6}/>
+          min={pagesInfo[selectedPage] === undefined ? 0 : pagesInfo[selectedPage]?.stepFrom + 1}
+          value={pagesInfo[selectedPage]?.stepTo}
+          onChange={(e) => handleStepChange(selectedPage, undefined, Number(e.target.value))}/>
           </div>
         </FloatingMenu>
         <div className="relative h-full w-full">
