@@ -256,12 +256,14 @@ export default function CreateManualPage(){
                 dragOverBottom ? "border-2 border-blue-400 border-dashed bg-blue-50" : ""
               )}
             />
+          </div>
             {/* Footer */}
             <hr className="mt-2 mb-2"/>
+            {selectedPage < 0 || selectedPage >= pagesInfo.length ? <></> : <>
               <label htmlFor="from-step" className="text-sm">From Step</label>
               <input id="from-step" type="number" 
           className="border-1 border-neutral-300 rounded-md h-10 p-2 w-32 mb-4"
-          min={pagesInfo[selectedPage-1] === undefined ? 0 : pagesInfo[selectedPage-1]?.stepTo + 1}
+          min={pagesInfo[selectedPage-1] === undefined ? 0 : pagesInfo[selectedPage-1].stepTo + 1}
           value={pagesInfo[selectedPage]?.stepFrom}
           onChange={(e) => handleStepChange(selectedPage, Number(e.target.value), undefined)}/>
               <label htmlFor="from-step" className="text-sm">To Step</label>
@@ -270,7 +272,7 @@ export default function CreateManualPage(){
           min={pagesInfo[selectedPage] === undefined ? 0 : pagesInfo[selectedPage]?.stepFrom + 1}
           value={pagesInfo[selectedPage]?.stepTo}
           onChange={(e) => handleStepChange(selectedPage, undefined, Number(e.target.value))}/>
-          </div>
+          </>}
         </FloatingMenu>
         <div className="relative h-full w-full">
           {pagesInfo === null ? <></> : 
