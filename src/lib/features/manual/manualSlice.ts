@@ -21,6 +21,9 @@ const manualSlice = createSlice({
     },
     addManual: (state, action: PayloadAction<Manual>) => {
       state.manuals.push(action.payload);
+      if (!state.currentManual) {
+        state.currentManual = action.payload;
+      }
     },
     updateManual: (state, action: PayloadAction<Manual>) => {
       const index = state.manuals.findIndex(

@@ -1,6 +1,6 @@
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from "@/components/ui/sidebar";
 import { SidebarItemObject } from "@/types/sidebar-types";
-import { FileUp, Home, ImagePlus } from "lucide-react";
+import { FileUp, Home, ImagePlus, Library } from "lucide-react";
 
 const instructionMenuItems : SidebarItemObject[] = [
   {
@@ -12,6 +12,11 @@ const instructionMenuItems : SidebarItemObject[] = [
     name: "Load Gaze Data",
     url: "/load_gaze",
     icon: FileUp
+  },
+  {
+    name: "Saved Manuals",
+    url: "/manuals",
+    icon: Library
   }
 ];
 

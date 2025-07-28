@@ -2,6 +2,8 @@
 
 import FloatingMenu from "@/components/floating-menu";
 import StackedImage from "@/components/stacked-image";
+import { addManual } from "@/lib/features/manual/manualSlice";
+import { useAppDispatch, useAppSelector} from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 import { Page } from "@/types/manual-types";
 import { Check, Edit, Trash } from "lucide-react";
@@ -9,7 +11,9 @@ import Form from "next/form";
 import React from "react";
 export default function CreateManualPage(){
   // States for manual creation
-  const [loadImages, setLoadImages] = React.useState<File[] | null>(null);
+  // const [loadImages, setLoadImages] = React.useState<File[] | null>(null);
+  const [imageDict, setImageDict] = React.useState<{ [imgURL: string]: File }>({});
+  
   const [selectedPage, setSelectedPage] = React.useState<number>(0);
 
   // States for Manual Object creation
@@ -26,21 +30,28 @@ export default function CreateManualPage(){
   const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
   const [dragOverBottom, setDragOverBottom] = React.useState<boolean>(false);
 
+  // Store dispatch for manual actions
+  const dispatch = useAppDispatch();
+  const manuals = useAppSelector((state) => state.manuals.manuals); 
 
   React.useEffect(() => {
-    if (hasPressedLoad && loadImages !== null) {
+    if (hasPressedLoad && Object.keys(imageDict).length > 0) {
       // Create initial pages info based on selected images
-      const initialPages: Page[] = loadImages.map((file, index) => ({
+      const initialPages: Page[] = Object.keys(imageDict).map((key, index) => ({
         name: `Page ${index + 1}`,
-        imgURL: file, // Assuming imgURL is a File object
-        filename: file.name,
-        stepFrom: -1, 
+        imgURL: key,
+        filename: key,
+        stepFrom: -1,
         stepTo: -1,
       }));
       setPagesInfo(initialPages);
     }
     setPressedLoad(false);
-  }, [hasPressedLoad, loadImages]);
+  }, [hasPressedLoad, imageDict]);
+
+  React.useEffect(() => {
+    console.log("Manuals updated:", manuals.length);
+  }, [manuals.length]);
 
   const handleStepChange = (index: number, stepFrom?: number , stepTo?: number) => {
     if (pagesInfo && index >= 0 && index < pagesInfo.length) {
@@ -82,6 +93,40 @@ export default function CreateManualPage(){
     }
   }
 
+  const handleSaveManual = () => {
+    if (manualName.trim() === "") {
+      alert("Manual name cannot be empty.");
+      return;
+    }
+    if (pagesInfo.length === 0) {
+      alert("Please add at least one page to the manual.");
+      return;
+    }
+
+    const newManual = {
+      name: manualName,
+      pages: pagesInfo.map(page => ({
+        name: page.name,
+        imgURL: page.imgURL,
+        filename: page.filename,
+        stepFrom: page.stepFrom,
+        stepTo: page.stepTo,
+      }))}
+
+    dispatch(addManual(newManual));
+
+    alert("Manual saved successfully!");
+
+    // Here you would typically send the manual data to your backend or store it in some way
+    console.log("Manual saved:", newManual);
+    // Reset state after saving
+    setManualName("Unnamed Manual");
+    setPagesInfo([]);
+    setSelectedPage(0);
+    setPressedLoad(false);
+    setIsEditingManual(false);
+    setImageDict({}); // Clear image dictionary
+  }
 
   // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -189,29 +234,37 @@ export default function CreateManualPage(){
               className="hidden" 
               onChange={(e) => {
                 const files = e.target.files;
-                setLoadImages(files? Array.from(files) : null);
+                if (files) {
+                  const newImageDict: { [imgURL: string]: File } = {};
+                  Array.from(files).forEach(file => {
+                    newImageDict[file.name] = file;
+                  });
+                  setImageDict(newImageDict);
+                }
+                // setLoadImages(files? Array.from(files) : null);
               }}
             />
             <div>
               <label htmlFor="imageUp" 
                 className="p-3 border-1 rounded-md text-sm text-neutral-800 hover:bg-neutral-100 cursor-pointer">
-                {loadImages === null || loadImages.length === 0
+                {Object.keys(imageDict).length === 0
                   ? "Upload manual images..." :
-                  loadImages.length === 1
+                  Object.keys(imageDict).length === 1
                     ? `1 image selected`
-                    : `${loadImages.length} images selected`
+                    : `${Object.keys(imageDict).length} images selected`
                 }
               </label>
               <input 
                 type="button" 
                 value="Load"
                 onClick={() => setPressedLoad(true)}
-                disabled={loadImages === null || loadImages.length === 0}
+                disabled={Object.keys(imageDict).length === 0}
                 className="ml-2 p-2 bg-black text-white rounded-md hover:bg-neutral-900 disabled:bg-neutral-400 disabled:text-neutral-100"/>
             </div>
           </Form>
         </div>
-        <button className="bg-green-700 text-white w-24 h-10 rounded-md hover:bg-green-600 mr-6"> Save </button>
+        <button className="bg-green-700 text-white w-24 h-10 rounded-md hover:bg-green-600 mr-6"
+          onClick={() => handleSaveManual()}> Save </button>
       </div>
       {/* Displays "No Images Loaded" when no images has been loaded yet */}
       { pagesInfo === null || pagesInfo.length === 0 ?
@@ -314,7 +367,7 @@ export default function CreateManualPage(){
         <div className="relative h-full w-full">
           {pagesInfo === null ? <></> : 
             <StackedImage 
-              images={pagesInfo.map((pages) => URL.createObjectURL(pages.imgURL))}
+              images={pagesInfo.map((pages) => URL.createObjectURL(imageDict[pages.imgURL]))}
               topIndex={selectedPage}
             />
           }

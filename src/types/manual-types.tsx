@@ -1,6 +1,6 @@
 export type Page = {
   name: string;
-  imgURL: File;
+  imgURL: string;
   filename: string;
   stepFrom: number;
   stepTo: number;
