@@ -19,6 +19,7 @@ export default function CreateManualPage(){
   // States for manual editing
   const [isEditingManual, setIsEditingManual] = React.useState<boolean>(false);
   const [hasPressedLoad, setPressedLoad] = React.useState<boolean>(false);
+  const [isEditingPageName, setIsEditingPageName] = React.useState<boolean>(false); 
 
   // Drag and drop states
   const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
@@ -51,6 +52,33 @@ export default function CreateManualPage(){
         pagesInfo[index].stepTo = stepTo;
       }
       setPagesInfo(updatedPages);
+    }
+  }
+
+  const handlePageNameChange = (index: number, newName: string) => {
+    if (pagesInfo && index >= 0 && index < pagesInfo.length) {
+      const updatedPages = [...pagesInfo];
+      updatedPages[index].name = newName;
+      setPagesInfo(updatedPages);
+    }
+  }
+
+  const handlePageDelete = (index: number) => {
+    if (pagesInfo && index >= 0 && index < pagesInfo.length) {
+      const updatedPages = pagesInfo.filter((_, idx) => idx !== index);
+      setPagesInfo(updatedPages);
+      // Adjust selected page index if necessary
+      if (selectedPage >= updatedPages.length) {
+        setSelectedPage(updatedPages.length - 1);
+      } else if (selectedPage === index) {
+        setSelectedPage(0); // Reset to first page if deleted
+      }
+      if (updatedPages.length === 0) {
+        setSelectedPage(-1); // No pages left
+        setPressedLoad(false); // Reset load state
+        setManualName("Unnamed Manual"); // Reset manual name
+        setIsEditingManual(false); // Reset editing state
+      }
     }
   }
 
@@ -232,12 +260,21 @@ export default function CreateManualPage(){
                   )}
                   onClick={() => setSelectedPage(idx)}>
                   <div> 
-                    <h3 className="text-base"> {page.name} </h3>
+                    <h3 className={cn("text-base w-40 overflow-hidden text-clip", isEditingPageName && selectedPage === idx ? 'hidden' : '')}> {page.name} </h3>
+                    <input type="text" 
+                      className={cn("text-base w-40 border-1 border-neutral-300 rounded-md", isEditingPageName && selectedPage === idx ? '' : 'hidden')}
+                      value={page.name}
+                      onChange={(e) => handlePageNameChange(idx, e.target.value)}/>
                     <h4 className="text-xs font-light text-neutral-700"> {page.filename} </h4>
                   </div>
                   <div className="flex flex-row gap-1">
-                    <Edit className="p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200"/>
-                    <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
+                    <button onClick={() => setIsEditingPageName(!isEditingPageName)}>
+                      <Edit className={cn("p-0.5 rounded-md hover:text-neutral-600 hover:bg-neutral-200", isEditingPageName && selectedPage === idx ? 'hidden' : '')}/>
+                      <Check className={cn("p-0.5 rounded-md text-green-800", isEditingPageName && selectedPage === idx ? '' : 'hidden')}/>
+                    </button>
+                    <button onClick={() => handlePageDelete(idx)}>
+                      <Trash className="p-0.5 rounded-md text-red-800 hover:text-red-700 hover:bg-neutral-200"/>
+                    </button>
                   </div>
                 </div>
               )
