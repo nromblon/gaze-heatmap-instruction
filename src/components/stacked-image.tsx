@@ -10,14 +10,14 @@ type StackedImageProps = {
   imageHeight?: number; // Height of each image
 };
 
-const StackedImage: React.FC<StackedImageProps> = ({
+const StackedImage: React.FC<StackedImageProps> = React.memo(function StackedImage({
   images,
   topIndex = 0,
   offsetX = 16,
   offsetY = 16,
   imageWidth = 1000,
   imageHeight = 800,
-}) => {
+}) {
   const balancerX = -offsetX * images.length / 2;
   const balancerY = -offsetY * images.length / 2;
 
@@ -60,6 +60,9 @@ const StackedImage: React.FC<StackedImageProps> = ({
       </div>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return (nextProps.images.length === prevProps.images.length &&
+          nextProps.topIndex === prevProps.topIndex);
+});
 
 export default StackedImage;
